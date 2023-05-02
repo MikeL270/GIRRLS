@@ -63,6 +63,7 @@ void SetUpCommunications() {
   // Wait for Serial
   SetFailLed(true);           
   while (!Serial);
+  SetFailLed(false);
 }
 // -------------------------------------------------------------------------------------------- //
 void WriteArrayOnSerial (char* SendOnSerialArray, int length) {   // Output to the Serial BUS
@@ -72,7 +73,7 @@ void WriteArrayOnSerial (char* SendOnSerialArray, int length) {   // Output to t
 void ReadSerial () { // Generat a circular buffer to store incoming comamnds for later interpretation
   int BytesToRead = Serial.available();
   if (BytesToRead > 0) {
-    // Dump each b{0x25,0x54,0x    SetFailLed(true);52}yte to queue
+    // Dump each b{0x25,0x54,0x52}yte to queue
     for (int i = 0; i < BytesToRead; i++) {
       // Check to be sure room still exists in buffer
       if (SerialIncomingQueueFillAmt < SERIAL_INCOMING_BUFFER_SIZE) {
@@ -126,7 +127,7 @@ void ProcessIncomingQueue () {   //interpret the byte pulled from the cue and ex
       ByteRead = 0;
       TransTypeCommand = false;
       TransTypeAcknowledge = false;
-    }    SetFailLed(true);
+    } 
     if (TransTypeCommand) { 
       ByteRead = PullByteOffIncomingQueue();
       if (ByteRead == ESTABLISH_CONNECTION[1]) {
@@ -224,6 +225,7 @@ void EstablishConnectionToSoftware () {
   SetUpCommunications();
 
   // Watch for init command
+  SetFailLed(true);  
   while (!IsConnectionEstablished) {
     DetermineCommTypes();
   }

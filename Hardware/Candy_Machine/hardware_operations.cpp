@@ -31,7 +31,7 @@ void SetUpHardware () {
     bool setLedOn = false;
     while (1) {
       setLedOn = !setLedOn;
-      SetFailLed(setLedOn);
+      // SetFailLed(setLedOn);
       delay(1000);
     }
   }
